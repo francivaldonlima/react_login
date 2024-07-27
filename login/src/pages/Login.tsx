@@ -1,27 +1,40 @@
-import React, { useState, useContext } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
-import { AuthContext } from '../contexts/AuthContext'
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
+import Swal from 'sweetalert2';
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const auth = useContext(AuthContext)
-  const navigate = useNavigate()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const auth = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const response = await axios.get('http://localhost:5000/users', {
-      params: { email, password }
-    })
-    const user = response.data.find((user: any) => user.email === email && user.password === password)
-    if (user) {
-      auth?.login(user.name)
-      navigate('/dashboard')
-    } else {
-      alert('Email or password is incorrect')
+    e.preventDefault();
+    try {
+      const response = await axios.get('http://localhost:5000/users', {
+        params: { email, password }
+      });
+      const user = response.data.find((user: any) => user.email === email && user.password === password);
+      if (user) {
+        auth?.login(user.name);
+        navigate('/dashboard');
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Email ou password incorretos!'
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Algo deu errado!'
+      });
     }
-  }
+  };
 
   return (
     <div className="max-w-md mx-auto mt-10">
@@ -55,7 +68,7 @@ const Login: React.FC = () => {
         </div>
       </form>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

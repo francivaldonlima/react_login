@@ -1,18 +1,41 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const Register: React.FC = () => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
-    await axios.post('http://localhost:5000/users', { name, email, password })
-    setName('')
-    setEmail('')
-    setPassword('')
-  }
+    e.preventDefault();
+    if (!name || !email || !password) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Todos os campos são necessários!'
+      });
+      return;
+    }
+
+    try {
+      await axios.post('http://localhost:5000/users', { name, email, password });
+      Swal.fire({
+        icon: 'success',
+        title: 'Registrado!',
+        text: 'O usuário foi registrado com sucesso.'
+      });
+      setName('');
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Algo deu errado!'
+      });
+    }
+  };
 
   return (
     <div className="max-w-md mx-auto mt-10">
@@ -55,7 +78,7 @@ const Register: React.FC = () => {
         </div>
       </form>
     </div>
-  )
+  );
 }
 
-export default Register
+export default Register;
