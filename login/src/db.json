@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "id": "db04",
+      "name": "francivaldo",
+      "email": "francivaldo@xyz.com",
+      "password": "123456"
+    },
+    {
+      "id": "0ab5",
+      "name": "valdo",
+      "email": "valdo@VAL.COM",
+      "password": "1234567"
+    }
+  ]
+}
